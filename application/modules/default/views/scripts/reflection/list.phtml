@@ -1,0 +1,54 @@
+<style type="text/css">
+#sortable {
+list-style-type:none;
+margin:0;
+padding:0;
+width:15%;
+}
+
+#sortable li {
+margin:0 3px 3px 3px;
+padding:0.4em;
+padding-left:1.5em;
+font-size:1.4em;
+height:18px;
+}
+
+#sortable li span {
+position:absolute;
+margin-left:-1.3em;
+}
+</style>
+
+<div class="rolesSort">
+<?php // Zend_Debug::dump($this->roles)?>
+<?php $this->jQuery()->enable()->uiEnable();?>
+
+<script type="text/javascript"><!--
+$(function(){
+	$('#sortable').sortable({opacity:0.6,cursor:'move'})
+	              .bind('sortupdate',function(){
+                    var order = $(this).sortable('serialize') + "&state=sortupdate";
+                    console.log(order);
+                    $.post("",order,function(response){
+                           //$('#output').html(response);
+                        }); 
+		               });
+            });
+
+
+
+</script>
+
+<h4>Drag Roles in Your Order</h4>
+<ul id="sortable">
+
+<?php foreach($this->roles as $role):?>
+<li class="ui-state-default" id="role_<?php echo $role['user_id'] . '#' . $role['role_id'] ?>"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><?php echo $role['name']?> </li>
+<?php endforeach;?>
+
+</ul>
+
+<div id="output"></div>
+
+</div>

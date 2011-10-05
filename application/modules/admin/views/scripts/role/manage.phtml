@@ -1,0 +1,211 @@
+<style type="text/css">
+select {
+width:150px;
+}
+</style>
+
+
+<div id="admin_role_manage">
+
+<form action="#">
+<label for="selectRole">Select Role </label>
+<select id="selectRole">
+</select>
+<ul id="privilegeList">
+
+<li>
+
+<label >Select Module
+<select class="selectModule">
+<option selected="selected" value="select"> Select Module</option>
+</select>
+</label>
+
+<label >Select Controller
+<select class="selectController"></select>
+</label>
+
+<label >Select Action
+<select class="selectAction"></select>
+</label>
+
+
+<input type="button" id="removeBtn" value="Remove privilege"/>
+
+</li>
+</ul>
+
+</form>
+<input type="button" value="Add privilege" id="addBtn"/>
+
+<div id="deleteDialog" title="This is dialog Title" class="dialog">
+<p>This is the delete dialog </p>
+</div>
+
+<div id="acceptDialog" title="This is dialog Title" class="dialog">
+<p>This is the default dialog which is usefull for display information </p>
+</div>
+
+
+
+
+<div id="panel">
+<button id="acceptBtn">Are you ready ? </button>
+<button id="deleteBtn">Delate the object ?</button>
+</div>
+
+</div>
+
+<script type="text/javascript">
+
+var modulesActionUrl = "<?php echo $this->url(array('module'=>'admin','controller'=>'role','action'=>'modules'),'default',true)?>";
+
+$(function(){
+
+$('#addBtn').click(function(){
+    var newItem = $('li:first','#privilegeList').clone(true).appendTo('#privilegeList');
+    fillModules(newItem);     
+                           
+});
+
+	
+	
+});
+
+function fillModules(newItem)
+{ 
+       var modules = [];
+	    if($.cookie('modules') == null)
+    {
+    $.getJSON(modulesActionUrl,null,function(data){
+     
+            $.cookie('modules',data);
+            createOptions(newItem,data,'.selectModule')
+         
+    });
+    }else {   
+
+    createOptions(newItem,$.cookie('modules').split(','),'.selectModule');
+    
+  
+
+    }
+}
+
+
+function createOptions($li,modules,selectClass)
+{
+    
+    console.log(modules.length);
+    $li.find(selectClass).find('option').remove(); //reset the selct
+  var label = "Select Action";
+  if(selectClass == ".selectController")
+  {
+	   label = "Select Controller";
+  }else if(selectClass == ".selectModule") label = "Select Module";
+	  
+  
+    $(document.createElement('option')).val("select").text(label)
+    .appendTo($li.find(selectClass));
+   
+ for(var i = 0 ; i < modules.length ; i++)
+ {
+          console.log(modules[i]);
+	     $(document.createElement('option')).val(modules[i]).text(modules[i])
+               .appendTo($li.find(selectClass));
+ }
+
+ 
+}
+    
+	    
+//select module and fill controllers
+
+$(function(){
+	$('.selectModule').change(function(){
+		 $this = $(this);
+          var selectedModule = $(this).val();
+          console.log('selected module' + selectedModule);
+          var modKey = 'module_' + selectedModule;
+          var controllers =[];
+          if($.cookie(modKey) == null)
+          {
+              var controllerUrl = "<?php echo $this->url(array('module'=>'admin','controller'=>'role','action'=>'controllers'),null,true)?>" + "/module_name/" + selectedModule;
+              $.getJSON(controllerUrl,null,function(data){
+                   $.cookie(modKey,data);
+                   console.log(this);
+                   $this.trigger('change');
+                  // createOptions($(this).parents('li').eq(0),$.cookie(modKey).split(','),'.selectController');
+                   
+                  });
+              }else {
+                   
+            controllers = $.cookie(modKey).split(',');
+            createOptions($(this).parents('li').eq(0),controllers,'.selectController');
+           }
+          
+          
+          
+		});
+});
+
+
+$(function(){
+	$('.selectController').change(function(){
+		$this = $(this);
+          var selectedController = $(this).val();
+          console.log('selected controller' + selectedController);
+          var selectedModule = $(this).parents('li').find('.selectModule').val();
+          var actionKey = 'module_' + selectedModule + '_controller_' + selectedController;
+          var actions =[];
+          if($.cookie(actionKey) == null)
+          {
+              var actionsUrl = "<?php echo $this->url(array('module'=>'admin','controller'=>'role','action'=>'actions'),null,true)?>" + "/module_name/" + selectedModule + "/controller_name/" + selectedController;
+              $.getJSON(actionsUrl,null,function(data){
+                   $.cookie(actionKey,data);
+                   $this.trigger("change");
+                  // createOptions($(this).parents('li').eq(0),data,'.selectAction');
+                   
+                  });
+              }else {
+                   
+           actions = $.cookie(actionKey).split(',');
+            createOptions($(this).parents('li').eq(0),actions,'.selectAction');
+           }
+          
+          
+          
+		});
+});
+
+
+
+
+
+$('.dialog').dialog({autoOpen:false});
+
+$(function(){
+
+	
+
+		$('#deleteBtn').click(function(){
+	    var $deleteDialog = $('#deleteDialog').dialog({buttons:{"Yes":function(){}}});
+	    $deleteDialog.dialog("open");
+			});
+	
+
+$('#acceptBtn').click(function(){
+   var acceptDialog =  $('#acceptDialog').dialog({buttons:{"OK":function(){console.log("you clicked ok");$(this).dialog("close")},
+	                                                       "Cancel":function(){console.log("you clicked cancel")}}});
+     acceptDialog.dialog("open");
+                    });
+
+	
+
+    
+});
+
+
+
+</script>
+

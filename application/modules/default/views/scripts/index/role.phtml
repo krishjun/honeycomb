@@ -1,0 +1,29 @@
+<?php $this->jQuery()->addJavascriptFile($this->baseUrl('lib/js/multiselect/plugins/localisation/jquery.localisation.js'))
+                   ->addJavascriptFile($this->baseUrl('lib/js/multiselect/plugins/scrollTo/jquery.scrollTo-min.js'))
+                   ->addJavascriptFile($this->baseUrl('lib/js/multiselect/ui.multiselect.js'));?>
+                   
+<?php $this->jQuery()->addStylesheet($this->baseUrl('lib/css/multiselect/common.css'))?>
+<?php $this->jQuery()->addStylesheet($this->baseUrl('lib/css/multiselect/ui.multiselect.css')) ?>                   
+
+ <!--  
+<select id="usersRoles" multiple="multiple" class="multiselect" id="roleSelect">
+<option selected="selected">foo</option>
+<option>baz</option>
+<option>bar</option>
+<option>doo</option>
+<option>too</option>
+</select>
+-->
+
+<?php echo $this->form ?>
+
+<script type="text/javascript">
+$(function(){
+
+	$(function(){
+		$.localise('ui-multiselect', {/*language: 'en',*/ path: "<?php echo $this->baseUrl('lib/js/multiselect/locale/')?>"});
+		$(".multiselect").multiselect();
+		
+		}); 
+});
+</script>

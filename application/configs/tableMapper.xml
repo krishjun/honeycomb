@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+<database>
+<tables>
+
+<assertions>Default_Model_DbTable_Assertions</assertions>
+<company>Default_Model_DbTable_Company</company>
+<modules>Default_Model_DbTable_Modules</modules>
+<privileges>Default_Model_DbTable_Privileges</privileges>
+<resources>Default_Model_DbTable_Resources</resources>
+<resource_types>Default_Model_DbTable_ResourceTypes</resource_types>
+<roles>Default_Model_DbTable_Roles</roles>
+<roles_privileges>Default__Model_DbTable_RolesPrivileges</roles_privileges>
+<users>Default_Model_DbTable_Users</users>
+<users_roles>Default_Model_DbTable_UsersRoles</users_roles>
+
+
+
+</tables>
+
+
+</database>
+
+</config>

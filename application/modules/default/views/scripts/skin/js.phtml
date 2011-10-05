@@ -1,0 +1,69 @@
+<style type="text/css">
+
+#container {
+	overflow: hidden;
+    width:100%;
+}
+
+#js , #css {
+	float:left;
+   width:50%;
+}
+
+.sortable {
+list-style-type:none;
+margin:0;
+padding:0;
+width:100%;
+}
+
+.sortable li {
+margin:0 3px 3px 3px;
+padding:0.4em;
+padding-left:1.5em;
+font-size:1.4em;
+height:18px;
+}
+
+.sortable li span {
+position:absolute;
+margin-left:-1.3em;
+}
+</style>
+
+<?php $this->jQuery()->enable()->uiEnable();?>
+
+<div id="container" >
+
+<div id="js">
+<ul class="sortable">
+<?php foreach($this->scripts as $script):?>
+<li class="ui-state-default" id="js_<?php echo $script->jscss_id ?>"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><?php echo $script->url ?></li>
+<?php endforeach;?>
+</ul>
+
+</div>
+
+
+<div id="css">
+<ul class="sortable">
+<?php foreach($this->styles as $style):?>
+<li class="ui-state-default" id="css_<?php echo $style->jscss_id ?>"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><?php echo $style->url ?></li>
+<?php endforeach;?>
+</ul>
+
+</div>
+
+</div>
+<script type="text/javascript">
+$(function(){
+$('.sortable').sortable();
+$('.sortable').bind('sortupdate',function(){
+var order = $(this).sortable('serialize') + '&command=sort';
+	$.post("",order);
+});
+	
+});
+</script>
+
+

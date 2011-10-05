@@ -1,0 +1,14 @@
+<?php
+class Appform_Layout_Controller_Plugin_Layout extends Zend_Layout_Controller_Plugin_Layout
+{
+    public function preDispatch($request)
+    {
+    
+      $view = $this->getLayout()->getView();
+      ZendX_JQuery::enableView($view);
+	 $view->jQuery()->setLocalPath($view->baseUrl('js/jquery-1.6.2.js'))
+   	                 ->setUiLocalPath($view->baseUrl('js/jquery-ui-1.8.14.custom.min.js'))
+   	                 ->addStylesheet($view->baseUrl('css/ui-lightness/jquery-ui-1.8.14.custom.css'));
+	 $view->addHelperPath('Appform/View/Helper','Appform_View_Helper');
+    }
+}

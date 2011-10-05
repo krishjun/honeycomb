@@ -1,0 +1,30 @@
+<style type="text/css">
+#content , #nav {
+	float:left;
+}
+</style>
+<?php $db = Zend_Db_Table::getDefaultAdapter();?>
+<?php $request = Zend_Controller_Front::getInstance()->getRequest();?>
+<div id="container" class="ui-helper-clearfix">
+<div id="nav">
+<?php echo $this->navigation($this->nav)->menu()?>
+
+<?php $controllers = $db->select()->from('modules',array())
+                                  ->join('resources','resources.module_id = modules.module_id','identifier')
+                                  ->where('modules.identifier = ?',$request->getModuleName())
+                                  ->query()
+                                  ->fetchAll(Zend_Db::FETCH_COLUMN);
+                                  
+                                  ?>
+                                  
+    <?php foreach($controllers as $controller):?>
+    <?php $this->accordionPane("modules","foo");?>
+    <?php endforeach;?>
+    <?php echo $this->accordionContainer("modules");?>                              
+u
+</div>
+<div id="content">
+<?php echo $this->layout()->content ?>
+<?php echo $this->jQuery()?>
+</div>
+</div>

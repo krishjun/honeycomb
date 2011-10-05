@@ -1,0 +1,16 @@
+<?php $this->jQuery()->uiEnable()?>
+<?php echo $this->users?>
+
+<script type="text/javascript">
+
+$(function(){
+
+	
+	$('#user').change(function(){
+
+        if($(this).val() == "label") return;
+        window.location = $(this).val();
+		}).prepend('<option selected="selected" value="label">Select a User</option>');
+});
+
+</script>

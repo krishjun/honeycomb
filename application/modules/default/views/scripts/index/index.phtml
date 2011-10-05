@@ -1,0 +1,79 @@
+<h3>Home page !!</h3>
+
+<?php echo $this->roleSelect?>
+
+
+
+<div id="tree"></div>
+
+<script type="text/javascript"><!--
+
+var data = ["foo","bar","baz"];
+
+$.map(data,function(value,index){
+
+	return "change" + " " + value;
+});
+
+var theTree;
+
+var options = {
+            // this handler not getting called ??
+
+
+	    onSelect: function(flag,node) {
+	        // A DynaTreeNode object is passed to the activation handler
+	        // Note: we also get this event, if persistence is on, and the page is reloaded.
+	        //alert("You activated " + node.data.key);
+	        console.log(node.data.title);
+	        console.log(flag);
+	        console.log(node);
+	        console.log(node.hasChildren());
+	        //flag true allow
+	        //flag false removeAllow
+           var command = flag ? 'allow':'removeAllow';
+            var data = new Array(); // info about all nodes which are selected or descected
+        /*   if(node.hasChildren()) //can be modeul or controller 
+            {
+                  var childs;
+                  childs = node.data.children; 
+                  if(node.data.isFolder) childs = node.data.children;
+                  $.each(childs,function($key,$value){ data.push($value)});
+               console.log(node.data);
+            }else {
+               data.push(node.data);
+              } */
+
+           //data.push(node.data);
+           console.log('command : ' + command);
+           console.log('selected sending request....');
+           $.post("<?php echo $this->serverUrl(true)?>",{"command":command,"data":node.data});
+	        
+	      },
+	      //initAjax:{url:"/honeycomb/public/index/index"},
+	      checkbox:true,
+	      selectMode:3
+	     
+	    };
+
+$("#tree").dynatree(options);
+
+
+</script>
+
+
+<script type="text/javascript">
+
+$(function(){
+
+$('#roleSelect').change(function(){
+	//options["initAjax"] = {url:$(this).val()};
+	if($(this).val() == 'label')return;
+	$('#tree').dynatree("option","initAjax",{url:$(this).val() +  "/command/loadRole"}).dynatree('getTree').reload();
+  
+ //$('#tree').dynatree(options);
+});
+
+});
+
+</script>

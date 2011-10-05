@@ -1,0 +1,16 @@
+<?php
+if(isset($this->loginFail)) echo $this->loginFail;
+if($this->form)
+{
+    echo $this->form;
+    return;
+}
+
+
+?>
+
+
+<h3> <?php echo Zend_Auth::getInstance()->getIdentity()->email?></h3>
+<h5><a href="<?php echo $this->url(array('action'=>'logout'))?>">Logout</a></h5>
+<?php echo Zend_Debug::dump(Zend_Auth::getInstance()->getIdentity()->getRoles());?>
+<?php Zend_Debug::dump(Honeycomb_Acl::getInstance()->testWaste())?>

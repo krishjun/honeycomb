@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<style type="text/css">
+.green {
+	color:#00FF00;
+}
+
+</style>
+
+<script type="text/javascript" src="../js/lib/jquery.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+
+<div id="relativeDiv"  style="background-color:red;width:320px;height:420px">
+<p>hi</p>
+</div>
+<ul id="list">
+<li></li>
+
+<li>
+   <ul id="subList">
+   <li></li>
+   <li></li>
+   <li></li>
+   </ul>
+</li>
+
+<li></li>
+<li></li>
+</ul>
+
+<div id="divList">
+<div id="div1" ></div>
+<div id="div2">
+
+</div>
+<div id="div3" ></div>
+</div>
+
+<ul id="liList2">
+<li>1</li>
+<li id="item2">2</li>
+<li>3</li>
+<li>4</li>
+<li>5</li>
+</ul>
+
+<dl>
+
+<dt id="foo">foo</dt>
+<dd>this is foo description</dd>
+
+<dt>bar</dt>
+<dd>This is bar description</dd>
+
+<dt>baz</dt>
+<dd>This is baz description</dd>
+
+</dl>
+
+<div id="div4">
+
+<h3>This is h3</h3>
+<p>This is para1 </p>
+</div>
+
+<div id="div5">
+<!--  aim is to select those img which are not wrapped inside p tag and then wrap them up -->
+<p><img src=""/> </p>
+<img src=""/>
+<img src=""/>
+<p><img src=""/> </p>
+<img src=""/>
+</div>
+
+<ul id="nav">
+<li>one</li>
+<li>two</li>
+<li>Three</li>
+<li>Four</li>
+<li>Five</li>
+</ul>
+
+<div id="removeMe"><p>old text</p></div>
+
+<a title="umanko" href="http://host2win.com">jason</a>
+
+<form>
+<label for="username">Username</label>
+<input type="text" id="username" name="username"/>
+<label for="email" name="email">Email</label>
+<input type="password" id="password" name="password"/>
+
+<label for="country" />Country</label>
+<select id="country" name="country">
+<option value="india">India</option>
+<option value="america">America</option>
+<option value="brazil">Brazil</option>
+<option value="pakistan">PAkistan</option>
+</select>
+
+<label for="gender">Gender</label>
+<label for="male">Male </label> <input type="radio" name="gender" value="male" id="male"/>
+<label for="female">Female</label> <input type="radio" name="gender" value="female" id="female"/>
+
+<h3>Do you like to recieve newsletter</h3>
+<label for="newsletter">Yes</label> <input type="checkbox" id="newsletter" checked="checked"/>
+
+</form>
+<div id="wrapper">
+<div id="parent0">
+<div id="parent1">
+<div id="parent2">I am parent2</div>
+</div>
+</div>
+</div>
+
+<ul id="removeUl">
+<li><a href="#">Remove me</a></li>
+<li><a>Remove me</a></li>
+<li><a>Remove me</a></li>
+<li><a>Remove mne</a></li>
+</ul>
+
+<div id="addBtnsDiv">
+<button>Add more</button>
+</div>
+
+<div id="uploadDiv">
+<div class="file">
+<input type="file" name="myfile[]"/>
+<button class="add">Add</button>
+<button class="remove" disabled="disabled">Remove</button>
+</div>
+</div>
+
+<div id="location"></div>
+
+<div id="formDiv">
+<form id="myForm">
+<input type="button" value="goo" disabled="disabled"/>
+<input type="button" value="doo"/>
+<input type="checkbox" value="Gender" name="male"/>
+<input type="radio" value="foo" name="age"/>
+
+</form>
+</div>
+<input type="button" id="ajaxBtn" value="Make ajax request"/>
+<select id="roleSelect" style="width:200px">
+
+</select>
+<a>dd</a>
+<script type="text/javascript">
+
+(function($){
+	$.fn.android = function(customOptions){
+		var options = $.extend({},$.fn.android.defaultOptions,customOptions);
+		var start = parseFloat(options.start);
+		return this.each(function(){
+			$this = $(this);
+			var interval = window.setInterval(function(){
+				$this.text(start++);
+				if($.isFunction(options.callback))
+					options.callback.apply($this);
+			},3000);
+		});
+		
+	};
+	jQuery.fn.android.defaultOptions = {start:0};
+})(jQuery);
+
+$(function(){
+	$('a').android({start:20,callback:function(){console.log(this[0].nodeName)}})
+});
+
+$(function(){
+	
+	$.ajaxSetup({
+		url:'/honeycomb/public/admin/role/list',
+		dataType:"json"
+	});
+	
+	$('#ajaxBtn').click(function(){
+		$.ajax({
+			success:function(data){
+			//var foo = eval(data); 
+			var data = $.parseJSON(data);
+			console.log(data[0].name);
+			createSelectOption(data);
+			}
+		});
+	});
+});
+
+function createSelectOption(data)
+{
+ for(var i = 0; i < data.length ; i++)
+	 {
+	 
+	 $(document.createElement('option')).val(data[i].role_id).text(data[i].name).appendTo('#roleSelect');
+	 }
+}
+
+function createSelectOptions(id,data,valueKey,textKey)
+{
+	for(var i = 0; i < data.length ; i++)
+	 {
+	 
+	 $(document.createElement('option')).val(data[i].role_id).text(data[i].name).appendTo('#roleSelect');
+	 }
+}
+
+$('#roleSelect').bind('change',function(){
+	 $.getJSON('/honeycomb/public/admin/role/info', {'id':this.value},function(data){
+		 console.log(data);
+	 })
+});
+
+
+$(function(){
+    if($(':input:first','#formDiv').is(':enabled'))
+		$(':input','#formDiv').val("I am a button");
+});
+
+$(document).mousemove(function(event){
+	$('#location').html('X : ' + event.pageX + ' Y : ' + event.pageY);
+});
+
+$('#relativeDiv').mousemove(function(event){
+	var x = event.pageX - this.offsetLeft;
+	var y = event.pageY - this.offsetTop;
+	$(this).find('p').html('x : ' + x + ' y : ' + y);
+});
+
+$(function(){
+	
+	$('.add').click(function(){
+		var div = $(this).parent('div.file');
+		div.clone(true).insertAfter(div).find('.remove').removeAttr('disabled').end().find('input').attr('value',"")
+		
+	});
+	
+	$('.remove').click(function(){
+		$(this).parent('div.file').remove();
+	});
+	
+	$('#removeUl').click(function(event){
+		$(event.target).parent('li').remove();
+		console.log(this.nodeName); //this is same as currentTarget
+		console.log(event.currentTarget.nodeName);
+	});
+	
+	$('a').click(function(event){
+		//event.stopImmediatePropagation();
+	  //return false;
+	});
+	
+	$('a').click(function(event){
+		console.log('a still works since its not immidete stop propagaiton');
+		
+	});
+	
+	$('#addBtnsDiv button').live('click',function(){
+		//$(this).after("<button>Add more</button>");
+	});
+	
+	$('#addBtnsDiv button').click(function(){
+		$(this).clone(true).insertAfter(this).prev().text('disabled').unbind('click');
+	});
+});
+
+</script>
+
+<!--  
+
+<script type="text/javascript">
+
+
+$(function(){
+	
+	$('ul').click(function(event){
+        $(this).parent('li').remove();
+        return false;
+	});
+	
+	
+	var status = "Current target in sequence order ";
+	var target = "";
+	$('#wrapper div').click(function(event){
+		status += event.target.id;
+		target += event.target;
+		console.log(status);
+	});
+	
+	
+	//alert(target);
+	
+/*	$(':input').bind('click',function(event){
+		alert("You clicked  " + event.target.name);
+		event.stopImmediatePropogation();
+		
+	});
+	
+	$(':input').bind('click',function(event){
+		alert("You clicked  " + event.target.name);
+	});
+*/	
+});
+
+
+
+$(function(){
+	$('#list')
+	          .find('> li') // Destructive
+	              .filter(':last')
+	                     .addClass('last')
+	              .end() //End of filter
+	              .find('ul') //Destructive method
+	                   .css('background','#FF0000')
+	                       .find('li:last')
+	                            .addClass('last')
+	                       .end()
+	              .end()
+	           .end()
+	           .find('li')
+	                .append('I am an &lt;li&gt;');
+	
+});
+
+
+$(function(){
+	
+	
+	$('<a id="btn1" href="#">Button</a>').appendTo('#list > li:last');
+	$(document.createElement('a')).text('I love Jquery').attr('href','http://host2win.com').appendTo('#list > li:first').click(function(){
+		alert('You clicked me');
+		return false;
+	});
+	
+	$('li').each(function(){
+		$(this).css('color','#00FF00');
+	});
+	
+	var li = $('li').get(0);
+	$(li).css('color','#000000');
+	
+	$('#divList div').text('hi i am uhaish');
+	
+	var divIdText = '';
+	$('#divList div').each(function(){
+		divIdText  += this.id ;
+	});
+	
+	$('<div></div>').text(divIdText).appendTo('#divList');
+	
+	//$('li','#subList').text('foo');
+	
+	$('div').filter(function(){
+		if($(this).css('position') == 'absolute') return true
+		return false;
+	}).text('this is positon absolute');
+	
+	$('ul:last li').eq(0).text('I am first but with index zero');
+	//$('a[href^= "http://"][title="umanko"]').text('foound');
+	$('a:contains("jason")').text('found again');
+	
+	$('ul:last li:not(:first):not(:last)').css('background-color','#0000FF');
+	
+	//if($('#foo').is('dt')) alert('element dt selected');
+	
+	$('ul:has(li#item2)').append("<li>This ul has item2</li"); //use of has , selects an element based upon some condition
+	
+	$('#div4').find('p').andSelf().css('background-color','orange');
+	
+	$('img').filter(function(){
+		return ! $(this).parent().is('p');
+	}).wrap('<p></p>');
+	
+	
+	
+	
+	$('li').click(function(){
+		var htmls = $(this).parent().html();
+		$(this).text(htmls);
+	});
+	
+	$('div#removeMe').remove().html(function(index,oldHtml){
+		var newHtml = "<p>new p</p>";
+		return newHtml + oldHtml;
+	}).appendTo('body');
+	
+    
+});
+
+</script>
+-->
+
+
+
+</body>
+</html>

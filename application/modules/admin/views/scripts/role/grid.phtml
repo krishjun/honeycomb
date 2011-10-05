@@ -1,0 +1,56 @@
+<?php $this->jQuery()->uiEnable() ?>
+<?php $this->jQuery()->addJavascriptFile($this->baseUrl('lib/js/grid/grid.locale-en.js'))
+                   ->addJavascriptFile($this->baseUrl('lib/js/grid/jquery.jqGrid.src.js'))
+                   ->addStylesheet($this->baseUrl('lib/css/grid/ui.jqgrid.css')); ?>
+           
+           
+<table id="myGrid" ></table>
+<div id="pjmap"></div>
+
+
+
+<script type="text/javascript">
+
+function inDetail(row)
+{
+	alert(row.role_id);
+}
+
+function radio(value, options, rowObject){
+    var checked = isNaN(value) ? '':'checked';
+    if(value != 1)
+
+    var radioHtml = '<input type="radio"  value=' + value + ' name="radioid" onclick="inDetail(' + rowObject + ')"/>';
+     else
+    var radioHtml = '<input type="radio"  value=' + value + ' name="radioid" checked="checked" onclick="inDetail(rowObject);"/>'; 
+	return radioHtml;
+	} 
+
+
+jQuery("#myGrid").jqGrid({        
+   	url:'<?php echo $this->url()?>',
+   	editurl:'<?php echo $this->url(array('action'=>'edit'))?>',
+	datatype: "json",
+   	colNames:['Role ID','Role Name','Is Default ?'],
+   	colModel:[
+   		{name:'role_id',index:'role_id',align:'center', width:400 ,editable:false,key:true},
+   		{name:'name',index:'name asc, invdate',align:'center', width:400,editable:true,editrules:{required:true}},	
+   		{name:'is_default', index:'is_default', width:200, search:false, align:'center', formatter: radio, editable:false, sortable: false, resizable:false}
+   	],
+   	rowNum:10,
+   	rowList:[10,20,30],
+   	pager: '#pjmap',
+   	sortname: 'role_id',
+    viewrecords: true,
+    sortorder: "asc",
+	jsonReader: {
+		repeatitems : false,
+		role_id: "0"
+	},
+	caption: "Roles",
+	height: '100%'
+
+});
+jQuery("#myGrid").jqGrid('navGrid','#pjmap',{edit:true,add:true,del:true});
+
+</script>

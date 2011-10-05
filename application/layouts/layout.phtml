@@ -1,0 +1,28 @@
+<?php echo $this->doctype(Zend_View_Helper_Doctype::XHTML1_TRANSITIONAL)?>
+<html>
+<head>
+
+
+<?php echo $this->headTitle()?>
+<?php echo $this->headLink()?>
+<?php echo $this->headStyle()?>
+<?php echo $this->jQuery()?>
+<?php echo $this->headScript()?>
+
+
+
+</head>
+<div id="header">
+<?php if(Zend_Auth::getInstance()->hasIdentity()) :?>
+<div>Welcome : <?php echo Zend_Auth::getInstance()->getIdentity()->email?> <a href="<?php echo $this->url(array('action'=>'logout','controller'=>'login','module'=>'default'))?>">Logout</a></div>
+<?php endif;?>
+</div>
+<?php echo $this->layout()->content?>
+
+
+
+
+</body>
+
+
+</html>

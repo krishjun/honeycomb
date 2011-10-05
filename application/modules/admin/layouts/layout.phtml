@@ -1,0 +1,13 @@
+<style type="text/css">
+#content , #nav {
+	float:left;
+}
+</style>
+<div id="container" class="ui-helper-clearfix">
+<div id="nav">
+<?php echo $this->navigation($this->nav)->menu()?>
+</div>
+<div id="content">
+<?php echo $this->layout()->content ?>
+</div>
+</div>

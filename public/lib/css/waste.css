@@ -1,0 +1,10 @@
+@charset "utf-8";
+#brown {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 16px;
+	font-style: italic;
+	font-weight: bold;
+	color: #000;
+	text-decoration: underline;
+	background-color: #0F9;
+}
